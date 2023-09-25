@@ -1,5 +1,3 @@
-
-
 /**
  *  @description
  *
@@ -8,30 +6,56 @@
  *
  */
 
+import { usuarios } from "../../domain/user.model";
+import {
+  CreateCommerce,
+  CreateUser,
+  CreateCampain,
+  CreateSuc,
+} from "../../domain/request.dto";
 
-import { User } from '../../domain/data';
-import { UserRepository } from '../../interface/controller/app.controller';
+import { UserRepository } from "../../interface/controller/app.repositories";
+import { campain } from "../../domain/db.model";
+import { NullishPropertiesOf } from "sequelize/types/utils";
+import { Optional } from "sequelize";
 
 export class UserService {
   constructor(private userRepository: UserRepository) {}
 
-  async createUser(user: User): Promise<void> {
-    await this.userRepository.create(user);
+  async createUser(user: CreateUser): Promise<void> {
+    const newUser:CreateUser = {
+      id_usu: user.id_usu,
+      nameuser: user.nameuser,
+      cc: user.cc,
+      id_bill: user.id_bill,
+    };
+    // const newUser = new usuarios(
+    // );
+    // newUser.id_usu = user.id_usu
+    // newUser.nameuser = user.nameuser
+    // newUser.cc = user.cc
+    // newUser.id_bill = user.id_bill
+
+    await usuarios.create(newUser as Optional<usuarios, NullishPropertiesOf<usuarios>>);
   }
 
-  async getUserById(id: string): Promise<User | null> {
-    return this.userRepository.findById(id);
+  async createCampain(campainn: CreateCampain): Promise<void> {
+    return this.userRepository.createCampain(campainn)
   }
 
-  async getUsers(): Promise<User[]> {
-    return this.userRepository.findAll();
+  async createSuc(sucursal: CreateSuc): Promise<void> {
+    return this.userRepository.createSuc(sucursal);
   }
 
-  async updateUser(user: User): Promise<void> {
-    await this.userRepository.update(user);
+  async createCommerce(commerce: CreateCommerce): Promise<void> {
+    return this.userRepository.createCommerce(commerce);
   }
 
-  async deleteUser(id: string): Promise<void> {
-    await this.userRepository.delete(id);
+  async getCampains(): Promise<campain[]> {
+    return this.userRepository.findCampains();
+  }
+
+  async getUsers(): Promise<usuarios[]> {
+    return this.userRepository.findUsuarios();
   }
 }

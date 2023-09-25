@@ -1,12 +1,20 @@
-import express, { Application } from 'express';
-import swaggerUi from 'swagger-ui-express';
-import bodyParser from 'body-parser';
-import swaggerJsdoc from 'swagger-jsdoc';
-import { Sequelize } from 'sequelize-typescript';
-import dotenv from 'dotenv';
-import { User } from './domain/data';
-import { UserService } from './application/use_case/app.service';
-import { InMemoryUserRepository } from './infraestrcuture/adapters/app.repository';
+import express, { Application } from "express";
+import swaggerUi from "swagger-ui-express";
+import bodyParser from "body-parser";
+import swaggerJsdoc from "swagger-jsdoc";
+
+import dotenv from "dotenv";
+import {
+  CreateCommerce,
+  CreateUser,
+  CreateCampain,
+  CreateSuc,
+} from "./domain/request.dto";
+import { UserService } from "./application/use_case/app.service";
+import { InMemoryUserRepository } from "./infraestrcuture/adapters/app.repository";
+
+import { usuarios } from "./domain/db.model";
+import sequelize from "./infraestrcuture/adapters/database.adapter";
 
 dotenv.config();
 
@@ -18,19 +26,9 @@ app.use(bodyParser.json());
 const userRepository = new InMemoryUserRepository();
 const userService = new UserService(userRepository);
 
-const sequelize = new Sequelize({
-  dialect: 'postgres',
-  host: process.env.DB_HOST ||'localhost', 
-  username: process.env.DB_USER, 
-  password: process.env.DB_PASS, 
-  database: process.env.DB_NAME, 
-  models: [__dirname + '/models'], 
-});
-
-export default sequelize;
 /**
  * @swagger
- * /users:
+ * /api/UserCreate:
  *   post:
  *     summary: Crea un nuevo usuario
  *     requestBody:
@@ -39,7 +37,7 @@ export default sequelize;
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/User'
+ *             $ref: '#/components/schemas/UserCreate'
  *     responses:
  *       201:
  *         description: Usuario creado
@@ -47,42 +45,33 @@ export default sequelize;
  *         description: Error en la solicitud
  */
 
-app.post('/users', async (req, res) => {
-  const user: User = req.body;
-  await userService.createUser(user);
-  res.status(201).send('User created');
+app.post("/api/UserCreate", async (req, res) => {
+  try {
+    const user: CreateUser = req.body;
+    const newUser = await userService.createUser(user);
+    res.status(201).json(res);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send(error.message);
+  }
 });
 
-/**
- * @swagger
- * /users/{id}:
- *   get:
- *     summary: Obtiene un usuario por su ID
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         description: ID del usuario
- *         schema:
- *           type: string
- *     responses:
- *       200:
- *         description: Usuario encontrado
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/User'
- *       404:
- *         description: Usuario no encontrado
- */
+app.post("/api/CampainCreate", async (req, res) => {
+  const camp: CreateCampain = req.body;
+  await userService.createCampain(camp);
+  res.status(201).send("User created");
+});
 
-app.get('/users/:id', async (req, res) => {
-  const userId = req.params.id;
-  const user = await userService.getUserById(userId);
-  if (!user) {
-    return res.status(404).send('User not found');
-  }
-  res.json(user);
+app.post("/api/ComerceCreate", async (req, res) => {
+  const comm: CreateCommerce = req.body;
+  await userService.createCommerce(comm);
+  res.status(201).send("User created");
+});
+
+app.post("/api/SucCreate", async (req, res) => {
+  const sucu: CreateSuc = req.body;
+  await userService.createSuc(sucu);
+  res.status(201).send("User created");
 });
 
 /**
@@ -103,54 +92,80 @@ app.get('/users/:id', async (req, res) => {
  *               ]
  */
 
-app.get('/users', async (_, res) => {
+app.get("/api/Campanas", async (_, res) => {
   const users = await userService.getUsers();
   res.json(users);
 });
 
-app.put('/users/:id', async (req, res) => {
-  const userId = req.params.id;
-  const updatedUser: User = req.body;
-  updatedUser.id = userId; // Ensure the ID matches the URL param
-  await userService.updateUser(updatedUser);
-  res.send('User updated');
+app.get("/api/Users", async (_, res) => {
+  const users = await userService.getUsers();
+  res.json(users);
 });
-
-app.delete('/users/:id', async (req, res) => {
-  const userId = req.params.id;
-  await userService.deleteUser(userId);
-  res.send('User deleted');
+sequelize.sync().then(() => {
+  app.listen(port, () => {
+    console.log(
+      `Aplicacion ${process.env.APPNAME} escuchando en el puerto ${port}`
+    );
+  });
 });
-
-app.listen(port, () => {
-  console.log(`Servidor escuchando en el puerto ${port}`);
-});
-
-
-
 const options = {
   swaggerDefinition: {
-    openapi: '3.0.0',
+    openapi: "3.0.3",
     info: {
-      title: 'User API',
-      version: '1.0.0',
-      description: 'API para administrar usuarios',
+      title: `${process.env.APPNAME}`,
+      version: "1.0.0",
+      description: "API de prueba para leal Developer: Nicolas Perdomo",
     },
     components: {
       schemas: {
-        User: {
-          type: 'object',
+        CrearComercio: {
+          type: "object",
           properties: {
-            id: { type: 'string' },
-            name: { type: 'string' },
-            email: { type: 'string' },
+            id_com: { type: "number" },
+            nombre_com: { type: "string" },
+            id_cam: { type: "number" },
+            id_suc: { type: "number" },
+          },
+        },
+        CrearSucursal: {
+          type: "object",
+          properties: {
+            id_suc: { type: "number" },
+            namesuc: { type: "string" },
+            id_usu: { type: "number" },
+          },
+        },
+        CrearUsuario: {
+          type: "object",
+          properties: {
+            id_usu: { type: "number" },
+            nameuser: { type: "string" },
+            cc: { type: "number" },
+            id_bill: { type: "number" },
+          },
+        },
+        CrearCampaña: {
+          type: "object",
+          properties: {
+            id_cam: { type: "string" },
+            nombre_cam: { type: "string" },
+            id_suc: { type: "string" },
+            idComercio: { type: "string" },
+          },
+        },
+        ConsultaCampaña: {
+          type: "object",
+          properties: {
+            id: { type: "string" },
+            name: { type: "string" },
+            email: { type: "string" },
           },
         },
       },
     },
   },
-  apis: ['./server.ts'], // Especifica los archivos que contienen las anotaciones JSDoc
+  apis: ["./server.ts"], // Especifica los archivos que contienen las anotaciones JSDoc
 };
 const specs = swaggerJsdoc(options);
 
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
