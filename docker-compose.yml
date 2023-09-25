@@ -1,0 +1,20 @@
+version: '3'
+services:
+  postgres:
+    image: postgres:latest
+    container_name: mi_postgres
+    environment:
+      POSTGRES_USER: postgresleal
+      POSTGRES_PASSWORD: PostgresLeal
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"      
+    
+    command: ["postgres", "-c", "log_statement=all"]
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./create_tables.sql:/docker-entrypoint-initdb.d/create_tables.sql
+
+volumes:
+  postgres_data:
+
