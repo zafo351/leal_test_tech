@@ -35,4 +35,10 @@ export interface CreateSuc {
 export interface updateCash {
   id_bil:number;
   coins: number;
+  id_com:number;
+}
+
+export interface updateCommerceCash {
+  id_bil:number;
+  id_com: number;
 }

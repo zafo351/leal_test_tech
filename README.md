@@ -2,6 +2,9 @@
 Prueba tecnica de  desarrollo para LEAL
 
 
+![Modelo Relacional de la base de datos](https://github.com/zafo351/leal_test_tech/blob/main/DBModel.png)
+
+
 ## Configuration 
 
 1) Ejecutar el comando para instalar dependencias:
@@ -29,8 +32,9 @@ Prueba tecnica de  desarrollo para LEAL
 ```bash
     $ npm run start:dev
 ```
-6) Para ejecutar las pruebas se debe tener en cuenta:
-    6.1) Primero Crear el usuario (la billetera se crea automaticamente y se registra con el id del usuario)
-    6.2) Segundo Crear el comercio
-    6.3) Tercero Crear la sucursal (con el mismo id del comercio)
-    6.4) Cuarto Crear la campaña (con el mismo id del comercio y la sucursal)
+6) Adjunto en el repositorio se encuentra el archivo leal_test.postman_collenction.json con la coleccion postman, para ejecutar las pruebas se debe tener en cuenta:
+
+    - Primero Crear el usuario (la billetera se crea automaticamente y se registra con el id del usuario)
+    - Segundo Crear el comercio
+    - Tercero Crear la sucursal (con el mismo id del comercio)
+    - Cuarto Crear la campaña (con el mismo id del comercio y la sucursal)

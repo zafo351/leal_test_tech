@@ -10,6 +10,7 @@ import {
   CreateCampain,
   CreateSuc,
   updateCash,
+  updateCommerceCash,
 } from "./domain/request.dto";
 import { UserService } from "./application/use_case/app.service";
 import { InMemoryUserRepository } from "./infraestructure/adapters/app.repository";
@@ -57,10 +58,21 @@ app.post("/api/UserCreate", async (req, res) => {
   }
 });
 
-app.put("api/cash", async (req, res) => {
+app.put("/api/coins", async (req, res) => {
   try {
-    const cash:updateCash=req.body
+    const cash: updateCash = req.body;
     const resCash = await userService.updateCash(cash);
+    res.status(201).send(resCash);
+  } catch (error) {
+    console.log(`Error en metodo ${error}`);
+    res.status(500).send(error);
+  }
+});
+
+app.put("/api/comerceCash", async (req, res) => {
+  try {
+    const cashCommer: updateCommerceCash = req.body;
+    const resCash = await userService.updateCommerceCash(cashCommer);
     res.status(201).send(resCash);
   } catch (error) {
     console.log(`Error en metodo ${error}`);
@@ -93,7 +105,7 @@ app.post("/api/ComerceCreate", async (req, res) => {
 app.post("/api/SucCreate", async (req, res) => {
   try {
     const sucu: CreateSuc = req.body;
-    const reSuc=await userService.createSuc(sucu);
+    const reSuc = await userService.createSuc(sucu);
     res.status(201).send(reSuc);
   } catch (error) {
     console.log(`Error en metodo ${error}`);
