@@ -5,6 +5,10 @@ Prueba tecnica de  desarrollo para LEAL
 ![Modelo Relacional de la base de datos](https://github.com/zafo351/leal_test_tech/blob/main/DBModel.png)
 
 
+swagger documentation: 
+
+http://localhost:8081/api-docs/
+
 ## Configuration 
 
 1) Ejecutar el comando para instalar dependencias:

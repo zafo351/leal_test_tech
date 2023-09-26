@@ -21,7 +21,6 @@ describe('UserService', () => {
     });
 
     it('debe manejar errores al crear un usuario', async () => {
-      // Simular un error en la creación del usuario
       const user = /* crear un objeto CreateUser para la prueba */;
       const error = new Error('Error simulado');
       userService.dbclient.usuarios.create = jest.fn().mockRejectedValue(error);
