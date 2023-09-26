@@ -156,48 +156,58 @@ const options = {
     },
     components: {
       schemas: {
-        CrearComercio: {
+        ComerceCreate: {
           type: "object",
           properties: {
             id_com: { type: "number" },
             nombre_com: { type: "string" },
-            id_cam: { type: "number" },
-            id_suc: { type: "number" },
           },
         },
-        CrearSucursal: {
+        SucCreate: {
           type: "object",
           properties: {
             id_suc: { type: "number" },
             namesuc: { type: "string" },
-            id_usu: { type: "number" },
+            id_com: { type: "number" },
           },
         },
-        CrearUsuario: {
+        UserCreate: {
           type: "object",
           properties: {
             id_usu: { type: "number" },
             nameuser: { type: "string" },
             cc: { type: "number" },
-            id_bill: { type: "number" },
           },
         },
-        CrearCampaña: {
+        CampainCreate: {
           type: "object",
           properties: {
-            id_cam: { type: "string" },
+            id_cam: { type: "number" },
             nombre_cam: { type: "string" },
-            id_suc: { type: "string" },
-            idComercio: { type: "string" },
+            id_suc: { type: "number" },
+            id_com: { type: "number" },
           },
         },
-        ConsultaCampaña: {
+        coins: {
           type: "object",
           properties: {
-            id: { type: "string" },
-            name: { type: "string" },
-            email: { type: "string" },
+            id_bil: { type: "number" },
+            coins: { type: "number" },
+            id_com: { type: "number" },
           },
+        },
+        comerceCash: {
+          type: "object",
+          properties: {
+            id_bil: { type: "number" },
+            id_com: { type: "number" },
+          },
+        },
+        Campanas: {
+          type: "Get",
+        },
+        Users: {
+          type: "Get",
         },
       },
     },
