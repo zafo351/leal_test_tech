@@ -11,10 +11,10 @@ import {
   CreateSuc,
 } from "./domain/request.dto";
 import { UserService } from "./application/use_case/app.service";
-import { InMemoryUserRepository } from "./infraestrcuture/adapters/app.repository";
+import { InMemoryUserRepository } from "./infraestructure/adapters/app.repository";
 
 import { usuarios } from "./domain/db.model";
-import sequelize from "./infraestrcuture/adapters/database.adapter";
+import sequelize from "./infraestructure/adapters/database.adapter";
 
 dotenv.config();
 
@@ -56,10 +56,24 @@ app.post("/api/UserCreate", async (req, res) => {
   }
 });
 
+app.put("api/cash", async (req, res)=>{
+  try{
+    
+  }catch(error){
+
+  }
+
+});
+
 app.post("/api/CampainCreate", async (req, res) => {
-  const camp: CreateCampain = req.body;
-  await userService.createCampain(camp);
-  res.status(201).send("User created");
+  try {
+    const camp: CreateCampain = req.body;
+    const resCamp = await userService.createCampain(camp);
+    res.status(201).send(resCamp);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send(error);
+  }
 });
 
 app.post("/api/ComerceCreate", async (req, res) => {
@@ -101,12 +115,11 @@ app.get("/api/Users", async (_, res) => {
   const users = await userService.getUsers();
   res.json(users);
 });
-sequelize.sync().then(() => {
-  app.listen(port, () => {
-    console.log(
-      `Aplicacion ${process.env.APPNAME} escuchando en el puerto ${port}`
-    );
-  });
+
+app.listen(port, () => {
+  console.log(
+    `Aplicacion ${process.env.APPNAME} escuchando en el puerto ${port}`
+  );
 });
 const options = {
   swaggerDefinition: {

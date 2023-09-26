@@ -5,8 +5,6 @@
  *  @date 24/09/2023
  *
  */
-
-import { usuarios } from "../../domain/user.model";
 import {
   CreateCommerce,
   CreateUser,
@@ -18,33 +16,31 @@ import { UserRepository } from "../../interface/controller/app.repositories";
 import { campain } from "../../domain/db.model";
 import { NullishPropertiesOf } from "sequelize/types/utils";
 import { Optional } from "sequelize";
+import { PrismaClient } from "@prisma/client";
 
 export class UserService {
+  dbclient=new PrismaClient();
   constructor(private userRepository: UserRepository) {}
 
   async createUser(user: CreateUser): Promise<void> {
-    const newUser:CreateUser = {
-      id_usu: user.id_usu,
-      nameuser: user.nameuser,
-      cc: user.cc,
-      id_bill: user.id_bill,
-    };
-    // const newUser = new usuarios(
-    // );
-    // newUser.id_usu = user.id_usu
-    // newUser.nameuser = user.nameuser
-    // newUser.cc = user.cc
-    // newUser.id_bill = user.id_bill
-
-    await usuarios.create(newUser as Optional<usuarios, NullishPropertiesOf<usuarios>>);
+    try{
+    this.dbclient.usuarios.create({data:user})
+    this.dbclient.billetera.create({data:{id_bil: user.id_bil,coins: 0,id_usu: user.id_usu}})
+    }catch(error){
+      console.log(error)
+    }
   }
 
   async createCampain(campainn: CreateCampain): Promise<void> {
-    return this.userRepository.createCampain(campainn)
+    try{
+    this.dbclient.campain.create({data:campainn})
+    }catch(error){
+      console.log(`Error de consumo en base de datos ${error}`)
+    }
   }
 
   async createSuc(sucursal: CreateSuc): Promise<void> {
-    return this.userRepository.createSuc(sucursal);
+    const resSucu = this.dbclient.sucursales.create({data:sucursal})
   }
 
   async createCommerce(commerce: CreateCommerce): Promise<void> {
@@ -55,7 +51,8 @@ export class UserService {
     return this.userRepository.findCampains();
   }
 
-  async getUsers(): Promise<usuarios[]> {
-    return this.userRepository.findUsuarios();
+  async getUsers(): Promise<void> {
+    const usuariosGet = this.dbclient.usuarios.findMany();
+    console.log(usuariosGet)
   }
 }
