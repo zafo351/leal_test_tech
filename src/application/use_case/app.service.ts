@@ -14,27 +14,26 @@ import {
 
 import { UserRepository } from "../../interface/controller/app.repositories";
 import { campain } from "../../domain/db.model";
-import { NullishPropertiesOf } from "sequelize/types/utils";
-import { Optional } from "sequelize";
 import { PrismaClient } from "@prisma/client";
 
 export class UserService {
   dbclient=new PrismaClient();
   constructor(private userRepository: UserRepository) {}
 
-  async createUser(user: CreateUser): Promise<void> {
-    try{
-    this.dbclient.usuarios.create({data:user})
-    this.dbclient.billetera.create({data:{id_bil: user.id_bil,coins: 0,id_usu: user.id_usu}})
-    }catch(error){
+  async createUser(user: CreateUser): Promise<any> {
+    try {
+      const newUser = await this.dbclient.usuarios.create({data: user});
+      await this.dbclient.billetera.create({data:{id_bil: user.id_bil,coins: 0,id_usu: user.id_usu}});
+      return newUser;
+    } catch(error){
       console.log(error)
     }
   }
 
   async createCampain(campainn: CreateCampain): Promise<void> {
-    try{
-    this.dbclient.campain.create({data:campainn})
-    }catch(error){
+    try {
+      this.dbclient.campain.create({data:campainn})
+    } catch(error){
       console.log(`Error de consumo en base de datos ${error}`)
     }
   }

@@ -49,10 +49,10 @@ app.post("/api/UserCreate", async (req, res) => {
   try {
     const user: CreateUser = req.body;
     const newUser = await userService.createUser(user);
-    res.status(201).json(res);
+    res.status(201).json(newUser);
   } catch (error) {
     console.error(error);
-    res.status(500).send(error.message);
+    res.status(500).send(error);
   }
 });
 
