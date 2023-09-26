@@ -8,54 +8,42 @@ datasource db {
 }
 
 model billetera {
-  id_bil                              Int        @id @default(autoincrement())
+  id_bil                              Int       @id @default(autoincrement())
   coins                               Int?
   id_usu                              Int?
   id_com                              Int?
-  usuarios_billetera_id_usuTousuarios usuarios?  @relation("billetera_id_usuTousuarios", fields: [id_usu], references: [id_usu], onDelete: NoAction, onUpdate: NoAction)
-  comercio                            comercio?  @relation(fields: [id_com], references: [id_com], onDelete: NoAction, onUpdate: NoAction, map: "fk_comercio")
-  usuarios_usuarios_id_bilTobilletera usuarios[] @relation("usuarios_id_bilTobilletera")
+  usuarios_billetera_id_usuTousuarios usuarios? @relation("billetera_id_usuTousuarios", fields: [id_usu], references: [id_usu], onDelete: NoAction, onUpdate: NoAction)
+  comercio                            comercio? @relation(fields: [id_com], references: [id_com], onDelete: NoAction, onUpdate: NoAction, map: "fk_comercio")
 }
 
 model campain {
-  id_cam                                Int          @id @default(autoincrement())
-  nombre_cam                            String?      @db.VarChar(50)
+  id_cam                                Int         @id @default(autoincrement())
+  nombre_cam                            String?     @db.VarChar(50)
   id_suc                                Int?
   id_com                                Int?
-  sucursales_campain_id_sucTosucursales sucursales?  @relation("campain_id_sucTosucursales", fields: [id_suc], references: [id_suc], onDelete: NoAction, onUpdate: NoAction)
-  comercio_campain_id_comTocomercio     comercio?    @relation("campain_id_comTocomercio", fields: [id_com], references: [id_com], onDelete: NoAction, onUpdate: NoAction, map: "fk_comercio")
-  comercio_comercio_id_camTocampain     comercio[]   @relation("comercio_id_camTocampain")
-  sucursales_sucursales_id_camTocampain sucursales[] @relation("sucursales_id_camTocampain")
+  comercio_campain_id_comTocomercio     comercio?   @relation("campain_id_comTocomercio", fields: [id_com], references: [id_com], onDelete: NoAction, onUpdate: NoAction, map: "fk_comercio")
+  sucursales_campain_id_sucTosucursales sucursales? @relation("campain_id_sucTosucursales", fields: [id_suc], references: [id_suc], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model comercio {
   id_com                                 Int          @id @default(autoincrement())
   nombre_com                             String?      @db.VarChar(50)
-  id_cam                                 Int?
-  id_suc                                 Int?
   billetera                              billetera[]
   campain_campain_id_comTocomercio       campain[]    @relation("campain_id_comTocomercio")
-  campain_comercio_id_camTocampain       campain?     @relation("comercio_id_camTocampain", fields: [id_cam], references: [id_cam], onDelete: NoAction, onUpdate: NoAction)
-  sucursales_comercio_id_sucTosucursales sucursales?  @relation("comercio_id_sucTosucursales", fields: [id_suc], references: [id_suc], onDelete: NoAction, onUpdate: NoAction)
   sucursales_sucursales_id_comTocomercio sucursales[] @relation("sucursales_id_comTocomercio")
 }
 
 model sucursales {
-  id_suc                               Int        @id @default(autoincrement())
-  namesuc                              String?    @db.VarChar(50)
+  id_suc                               Int       @id @default(autoincrement())
+  namesuc                              String?   @db.VarChar(50)
   id_com                               Int?
-  id_cam                               Int?
-  campain_campain_id_sucTosucursales   campain[]  @relation("campain_id_sucTosucursales")
-  comercio_comercio_id_sucTosucursales comercio[] @relation("comercio_id_sucTosucursales")
-  campain_sucursales_id_camTocampain   campain?   @relation("sucursales_id_camTocampain", fields: [id_cam], references: [id_cam], onDelete: NoAction, onUpdate: NoAction, map: "fk_campain")
-  comercio_sucursales_id_comTocomercio comercio?  @relation("sucursales_id_comTocomercio", fields: [id_com], references: [id_com], onDelete: NoAction, onUpdate: NoAction, map: "fk_comercio")
+  campain_campain_id_sucTosucursales   campain[] @relation("campain_id_sucTosucursales")
+  comercio_sucursales_id_comTocomercio comercio? @relation("sucursales_id_comTocomercio", fields: [id_com], references: [id_com], onDelete: NoAction, onUpdate: NoAction, map: "fk_comercio")
 }
 
 model usuarios {
   id_usu                               Int         @id @default(autoincrement())
   nameuser                             String?     @db.VarChar(50)
   cc                                   Int?
-  id_bil                               Int?
   billetera_billetera_id_usuTousuarios billetera[] @relation("billetera_id_usuTousuarios")
-  billetera_usuarios_id_bilTobilletera billetera?  @relation("usuarios_id_bilTobilletera", fields: [id_bil], references: [id_bil], onDelete: NoAction, onUpdate: NoAction, map: "fk_bill")
 }

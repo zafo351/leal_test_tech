@@ -9,6 +9,7 @@ import {
   CreateUser,
   CreateCampain,
   CreateSuc,
+  updateCash,
 } from "./domain/request.dto";
 import { UserService } from "./application/use_case/app.service";
 import { InMemoryUserRepository } from "./infraestructure/adapters/app.repository";
@@ -56,13 +57,15 @@ app.post("/api/UserCreate", async (req, res) => {
   }
 });
 
-app.put("api/cash", async (req, res)=>{
-  try{
-    
-  }catch(error){
-
+app.put("api/cash", async (req, res) => {
+  try {
+    const cash:updateCash=req.body
+    const resCash = await userService.updateCash(cash);
+    res.status(201).send(resCash);
+  } catch (error) {
+    console.log(`Error en metodo ${error}`);
+    res.status(500).send(error);
   }
-
 });
 
 app.post("/api/CampainCreate", async (req, res) => {
@@ -71,21 +74,31 @@ app.post("/api/CampainCreate", async (req, res) => {
     const resCamp = await userService.createCampain(camp);
     res.status(201).send(resCamp);
   } catch (error) {
-    console.error(error);
+    console.log(`Error en metodo ${error}`);
     res.status(500).send(error);
   }
 });
 
 app.post("/api/ComerceCreate", async (req, res) => {
-  const comm: CreateCommerce = req.body;
-  await userService.createCommerce(comm);
-  res.status(201).send("User created");
+  try {
+    const comm: CreateCommerce = req.body;
+    const resCommerce = await userService.createCommerce(comm);
+    res.status(201).send(resCommerce);
+  } catch (error) {
+    console.log(`Error en metodo ${error}`);
+    res.status(500).send(error);
+  }
 });
 
 app.post("/api/SucCreate", async (req, res) => {
-  const sucu: CreateSuc = req.body;
-  await userService.createSuc(sucu);
-  res.status(201).send("User created");
+  try {
+    const sucu: CreateSuc = req.body;
+    const reSuc=await userService.createSuc(sucu);
+    res.status(201).send(reSuc);
+  } catch (error) {
+    console.log(`Error en metodo ${error}`);
+    res.status(500).send(error);
+  }
 });
 
 /**
@@ -107,7 +120,7 @@ app.post("/api/SucCreate", async (req, res) => {
  */
 
 app.get("/api/Campanas", async (_, res) => {
-  const users = await userService.getUsers();
+  const users = await userService.getCampains();
   res.json(users);
 });
 
