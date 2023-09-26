@@ -2,10 +2,10 @@ CREATE TABLE usuarios (
  id_usu SERIAL PRIMARY key,
  nameuser varchar(50),
  cc INT,
- id_bill int
+ id_bil int
 );
 create table billetera (
-id_bill serial primary key,
+id_bil serial primary key,
 coins integer,
 id_usu int,
 foreign key (id_usu) references usuarios(id_usu)

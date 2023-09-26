@@ -17,7 +17,7 @@ export interface CreateUser {
   id_usu: number;
   nameuser: string;
   cc: number;
-  id_bill: number;
+  id_bil: number;
 }
 
 export interface CreateCampain {

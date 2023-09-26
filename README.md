@@ -12,5 +12,11 @@ npx tsc
 Ejecutar comando para subir la base de datos:
 docker-compose up
 
+Ejecutar comandos de actualizacion ORM:
+npx prisma db pull
+&&
+npx prisma generate 
+
+
 Ejecutar comando para iniciar la aplicacion:
-node dist/index.js
+npm run start:dev
