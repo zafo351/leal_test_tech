@@ -1,8 +1,6 @@
-##test
-/coverage
-
 ## Dependencies
 /node_modules
+/coverage
 
 ## Contructor
 /dist
